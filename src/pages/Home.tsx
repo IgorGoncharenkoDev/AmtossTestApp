@@ -1,17 +1,24 @@
-import React, { Fragment, FunctionComponent } from 'react'
+import React, { useState, Fragment, FunctionComponent } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { PageContainer } from '../pages'
 import UsersTable from '../components/UsersTable'
-import { Box, Button, Typography } from '@material-ui/core'
+import { Box, TextField, Button, Typography } from '@material-ui/core'
 
 import { usePageStyles } from '../styles/styles'
 
 
 const Home: FunctionComponent = () => {
+  const [ userQueryString, setUserQueryString ] = useState<string>('')
+
   const history = useHistory()
 
   const classes = usePageStyles()
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value as string
+    setUserQueryString(value.toLowerCase())
+  }
 
   return (
     <PageContainer>
@@ -29,8 +36,18 @@ const Home: FunctionComponent = () => {
               Add new user
             </Button>
           </Box>
+          <Box ml="auto">
+            <TextField
+              id="search-user"
+              type="search"
+              label="Search user"
+              variant="outlined"
+              onChange={ handleSearchChange }
+              classes={{ root: classes.searchInput }}
+            />
+          </Box>
         </Box>
-        <UsersTable />
+        <UsersTable userQueryString={ userQueryString } />
       </Fragment>
     </PageContainer>
   )

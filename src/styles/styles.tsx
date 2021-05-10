@@ -23,6 +23,9 @@ export const usePageStyles = makeStyles((theme: Theme) => createStyles({
     fontFamily: '\'Crimson Text\', serif',
     fontWeight: 600,
   },
+  searchInput: {
+    backgroundColor: '#fff'
+  },
 }))
 
 export const useTableStyles = makeStyles((theme: Theme) => createStyles({

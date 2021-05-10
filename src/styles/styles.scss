@@ -1,0 +1,15 @@
+@import './utils/base';
+
+html, body {
+  height: 100%;
+}
+
+body,
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  flex-grow: 1;
+}

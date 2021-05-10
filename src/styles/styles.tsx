@@ -28,6 +28,13 @@ export const usePageStyles = makeStyles((theme: Theme) => createStyles({
   },
 }))
 
+export const useHeaderStyles = makeStyles((theme: Theme) => createStyles({
+  logoutButton: {
+    color: '#fff',
+    borderColor: '#fff'
+  },
+}))
+
 export const useTableStyles = makeStyles((theme: Theme) => createStyles({
   tableRow: {
     display: 'flex',
@@ -52,7 +59,7 @@ export const useTableStyles = makeStyles((theme: Theme) => createStyles({
   }
 }))
 
-export const useUpdateUserStyles = makeStyles((theme: Theme) => createStyles({
+export const useUserFormStyles = makeStyles((theme: Theme) => createStyles({
   form: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),

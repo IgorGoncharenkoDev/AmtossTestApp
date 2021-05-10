@@ -10,7 +10,7 @@ const actionTypes: TActionTypes = {
 }
 
 type TValues = {
-  id: string
+  id?: string
   inputFields: {
     [ key: string ]: {
       value: string
@@ -18,17 +18,8 @@ type TValues = {
   }
 }
 
-const useForm = () => {
-  const initialState: TValues = {
-    id: '',
-    inputFields: {
-      name: { value: '' },
-      age: { value: '' },
-      location: { value: '' },
-      maritalStatus: { value: '' },
-      children: { value: '' },
-    },
-  }
+const useForm = (initialValues: TValues) => {
+  const initialState = initialValues
 
   const reducer = (state: any, action: any) => {
     switch (action.type) {

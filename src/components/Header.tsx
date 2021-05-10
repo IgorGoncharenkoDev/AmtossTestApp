@@ -1,6 +1,14 @@
-import React, { useEffect, useMemo, FunctionComponent } from 'react'
-import { Link } from 'react-router-dom'
-import { Container, AppBar, Tabs, Tab } from '@material-ui/core'
+import React, { useEffect, useMemo, useCallback, useContext, FunctionComponent, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { Container, Grid, AppBar, Tabs, Tab, Box, Button } from '@material-ui/core'
+
+import AuthContext, { TAuthContext } from '../contexts/authContext'
+
+import LogoutDialog from './Dialogs/LogoutDialog'
+
+import { getMenu } from '../utils/getMenu'
+
+import { useHeaderStyles } from '../styles/styles'
 
 type TProps = {
   activeMenuTab: number
@@ -16,10 +24,15 @@ type TMenuRoute = {
 const Header: FunctionComponent<TProps> = (props) => {
   const { activeMenuTab, handleChangeMenuTab } = props
 
-  const menuRoutes: Array<TMenuRoute> = useMemo(() => ([
-    { name: 'Home', link: '/', activeTab: 0 },
-    { name: 'Contact Us', link: '/contact-us', activeTab: 1 },
-  ]), [])
+  const history = useHistory()
+
+  const [ isDialogOpen, setIsDialogOpen ] = useState<boolean>(false)
+
+  const auth: TAuthContext = useContext(AuthContext)
+  const { isLoggedIn, logout } = auth
+
+  const menuRoutes: Array<TMenuRoute> = useMemo(() =>
+    getMenu(isLoggedIn), [ isLoggedIn ])
 
   useEffect(() => {
     [ ...menuRoutes ].forEach((route: TMenuRoute) => {
@@ -38,23 +51,85 @@ const Header: FunctionComponent<TProps> = (props) => {
     })
   }, [ activeMenuTab, menuRoutes ])
 
+  const handleLogout = useCallback(() => {
+    setIsDialogOpen(false)
+    logout()
+  }, [])
+
+  const handleAuthenticate = (): void => {
+    history.push('/auth')
+  }
+
+  const handleDialogOpen = (): void => {
+    setIsDialogOpen(true)
+  }
+
+  const handleDialogClose = useCallback(() => {
+    setIsDialogOpen(false)
+  }, [])
+
+  const headerClasses = useHeaderStyles()
+
   return (
-    <AppBar position="static">
-      <Container maxWidth="lg">
-        <Tabs value={ activeMenuTab } onChange={ (event: React.ChangeEvent<{}>, value: number) => handleChangeMenuTab(value) }>
-          {
-            menuRoutes.map(({ name, link }: TMenuRoute, index: number) => (
-              <Tab
-                key={ `tab-${ index }-${ name }`}
-                label={ name }
-                to={ link }
-                component={ Link }
-              />
-            ))
-          }
-        </Tabs>
-      </Container>
-    </AppBar>
+    <>
+      <AppBar position="static">
+        <Container maxWidth="lg">
+          <Grid container alignItems="center">
+            <Grid item>
+              <Tabs
+                value={ activeMenuTab }
+                onChange={ (event: React.ChangeEvent<{}>, value: number) => handleChangeMenuTab(value) }
+              >
+                {
+                  menuRoutes.map(({ name, link }: TMenuRoute, index: number) => (
+                    <Tab
+                      key={ `tab-${ index }-${ name }`}
+                      label={ name }
+                      to={ link }
+                      component={ Link }
+                    />
+                  ))
+                }
+              </Tabs>
+            </Grid>
+
+            {
+              isLoggedIn ? (
+                <Grid item style={ { marginLeft: 'auto ' } }>
+                  <Button
+                    variant="outlined"
+                    color="default"
+                    onClick={ handleDialogOpen }
+                    classes={ { root: headerClasses.logoutButton } }
+                  >
+                    Logout
+                  </Button>
+                </Grid>
+              ) : (
+                <Grid item style={ { marginLeft: 'auto ' } }>
+                  <Button
+                    variant="outlined"
+                    color="default"
+                    onClick={ handleAuthenticate }
+                    classes={ { root: headerClasses.logoutButton } }
+                  >
+                    Authenticate
+                  </Button>
+                </Grid>
+              )
+            }
+
+
+          </Grid>
+        </Container>
+      </AppBar>
+      <LogoutDialog
+        isLogoutDialogOpen={ isDialogOpen }
+        handleLogout={ handleLogout }
+        handleLogoutDialogClose={ handleDialogClose }
+      />
+    </>
+
   )
 }
 

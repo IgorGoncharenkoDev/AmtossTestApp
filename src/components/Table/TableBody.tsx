@@ -72,7 +72,7 @@ const TableBody: FunctionComponent<IProps> = (props) => {
         }) : (
           <div className={ clsx(classes.tableRow, classes.tableBodyRow) }>
             <div className={ classes.tableCell }>
-              <p>No data yet</p>
+              <p>No relevant data yet</p>
             </div>
           </div>
 

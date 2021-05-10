@@ -1,8 +1,7 @@
 import React, { FunctionComponent, SyntheticEvent } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { Box, Button, Paper } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { Paper, Box, Button } from '@material-ui/core'
 import { v4 as uuidv4 } from 'uuid'
 
 import { PageContainer } from '../pages'
@@ -10,32 +9,27 @@ import { maritalStatuses } from '../constants'
 import CustomInput from '../components/CustomInput'
 import useForm from '../hooks/useForm'
 
-import { useBaseStyles } from '../styles/styles'
+import { useBaseStyles, useUserFormStyles } from '../styles/styles'
 import { addUser } from '../redux/actions/userActions'
 
 interface IProps {
 
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    form: {
-      '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        width: 200,
-      }
-    },
-    button: {
-      margin: theme.spacing(1),
-    }
-  }),
-)
-
 const NewUser: FunctionComponent<IProps> = (props) => {
   const history = useHistory()
   const dispatch = useDispatch()
 
-  const [ handleInput, formState ] = useForm()
+  const [ handleInput, formState ] = useForm({
+    id: '',
+    inputFields: {
+      name: { value: '' },
+      age: { value: '' },
+      location: { value: '' },
+      maritalStatus: { value: '' },
+      children: { value: '' },
+    },
+  })
 
   const handleFormSubmit = (event: SyntheticEvent): void => {
     event.preventDefault()
@@ -62,7 +56,7 @@ const NewUser: FunctionComponent<IProps> = (props) => {
   }
 
   const baseClasses = useBaseStyles()
-  const classes = useStyles()
+  const classes = useUserFormStyles()
 
   return (
     <PageContainer>
@@ -102,7 +96,12 @@ const NewUser: FunctionComponent<IProps> = (props) => {
             />
           </Box>
           <Box>
-            <Button variant="contained" color="primary" className={ classes.button } type="submit">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={ classes.button }
+            >
               Submit
             </Button>
             <Button

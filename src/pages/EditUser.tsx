@@ -15,7 +15,7 @@ import { maritalStatuses } from '../constants'
 import { TRootState } from '../types/types'
 import { TUser } from '../types/types'
 
-import { useUpdateUserStyles, useProgressStyles } from '../styles/styles'
+import { useUserFormStyles, useProgressStyles } from '../styles/styles'
 
 type TParams = {
   id: string
@@ -33,19 +33,16 @@ const EditUser: FunctionComponent = (props) => {
 
   const currentUser: TUser | undefined = usersList.find(({ id }: TUser) => id === userId)
 
-  // useEffect(() => {
-  //   if (usersList.length) {
-  //     const currentUser: TUser | undefined = usersList.find(({ id }: TUser) => id === userId)
-  //
-  //     if (currentUser) {
-  //       setCurrentUser(currentUser)
-  //     }
-  //   }
-  //
-  //   setIsLoading(false)
-  // }, [ usersList, userId ])
-
-  const [ handleInput, formState, setFormData ] = useForm()
+  const [ handleInput, formState, setFormData ] = useForm({
+    id: '',
+    inputFields: {
+      name: { value: '' },
+      age: { value: '' },
+      location: { value: '' },
+      maritalStatus: { value: '' },
+      children: { value: '' },
+    },
+  })
   const { name, age, location, maritalStatus, children } = formState.inputFields
 
   /*useEffect(() => {
@@ -124,7 +121,7 @@ const EditUser: FunctionComponent = (props) => {
     history.push('/')
   }
 
-  const updateUserClasses = useUpdateUserStyles()
+  const updateUserClasses = useUserFormStyles()
   const progressClasses = useProgressStyles()
 
   return (

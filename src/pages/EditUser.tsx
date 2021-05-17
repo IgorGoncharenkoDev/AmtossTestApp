@@ -18,191 +18,167 @@ import { TUser } from '../types/types'
 import { useUserFormStyles, useProgressStyles } from '../styles/styles'
 
 type TParams = {
-  id: string
+	id: string
 }
 
-const EditUser: FunctionComponent = (props) => {
-  const [ isLoading, setIsLoading ] = useState<boolean>(true)
+const EditUser: FunctionComponent = () => {
+	const [ isLoading, setIsLoading ] = useState<boolean>(true)
 
-  const dispatch = useDispatch()
-  const history = useHistory()
-  const params: TParams = useParams()
-  const userId = params.id
+	const dispatch = useDispatch()
+	const history = useHistory()
+	const params: TParams = useParams()
+	const userId = params.id
 
-  const { usersList } = useSelector((state: TRootState) => state.users)
+	const { usersList } = useSelector((state: TRootState) => state.users)
 
-  const currentUser: TUser | undefined = usersList.find(({ id }: TUser) => id === userId)
+	const currentUser: TUser | undefined = usersList.find(({ id }: TUser) => id === userId)
 
-  const [ handleInput, formState, setFormData ] = useForm({
-    id: '',
-    inputFields: {
-      name: { value: '' },
-      age: { value: '' },
-      location: { value: '' },
-      maritalStatus: { value: '' },
-      children: { value: '' },
-    },
-  })
-  const { name, age, location, maritalStatus, children } = formState.inputFields
+	const [ handleInput, formState, setFormData ] = useForm({
+		id: '',
+		inputFields: {
+			name: { value: '' },
+			age: { value: '' },
+			location: { value: '' },
+			maritalStatus: { value: '' },
+			children: { value: '' },
+		},
+	})
+	const { name, age, location, maritalStatus, children } = formState.inputFields
 
-  /*useEffect(() => {
-    const fetchUsersList = (): Promise<Array<TUser>> => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(usersList)
-        }, 1000)
-      })
-    }
+	useEffect(() => {
+		if (!currentUser) {
+			return
+		}
 
-    const getUsersList = async (): Promise<void | null> => {
-      const usersList: Array<TUser> = await fetchUsersList()
-      const currentUser: TUser | undefined = usersList.find(({ id }: TUser) => id === userId)
+		const { id, name, age, location, maritalStatus, children } = currentUser
 
-      if (!currentUser) {
-        return null
-      }
+		const formDataToUpdate = {
+			id,
+			inputFields: {
+				name: { value: name },
+				age: { value: age },
+				location: { value: location },
+				maritalStatus: { value: maritalStatus },
+				children: { value: children },
+			}
+		}
 
-      setCurrentUser(currentUser)
-      setIsLoading(false)
-    }
+		console.log('formDataToUpdate =>', formDataToUpdate)
 
-    getUsersList()
+		setFormData(formDataToUpdate)
 
-  }, [])*/
+		setIsLoading(false)
+	}, [ currentUser ])
 
-  useEffect(() => {
-    if (!currentUser) {
-      return
-    }
+	const handleSubmit = (event: React.SyntheticEvent) => {
+		console.log('handleSubmit =>', formState.inputFields)
+		event.preventDefault()
 
-    const { id, name, age, location, maritalStatus, children } = currentUser
+		if (!currentUser) {
+			return
+		}
 
-    const formDataToUpdate = {
-      id,
-      inputFields: {
-        name: { value: name },
-        age: { value: age },
-        location: { value: location },
-        maritalStatus: { value: maritalStatus },
-        children: { value: children },
-      }
-    }
+		const updatedUser = {
+			id: currentUser.id,
+			name: name.value,
+			age: age.value,
+			location: location.value,
+			maritalStatus: maritalStatus.value,
+			children: children.value
+		}
 
-    console.log('formDataToUpdate =>', formDataToUpdate)
+		dispatch(updateUser({ ...updatedUser }))
+		history.push('/')
+	}
 
-    setFormData(formDataToUpdate)
+	const handleCancel = (event: SyntheticEvent): void => {
+		event.preventDefault()
+		history.push('/')
+	}
 
-    setIsLoading(false)
-  }, [ currentUser ])
+	const updateUserClasses = useUserFormStyles()
+	const progressClasses = useProgressStyles()
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
-    console.log('handleSubmit =>', formState.inputFields)
-    event.preventDefault()
+	return (
+		<PageContainer>
+			<>
+				<h2>User page</h2>
 
-    if (!currentUser) {
-      return
-    }
-
-    const updatedUser = {
-      id: currentUser.id,
-      name: name.value,
-      age: age.value,
-      location: location.value,
-      maritalStatus: maritalStatus.value,
-      children: children.value
-    }
-
-    dispatch(updateUser({ ...updatedUser }))
-    history.push('/')
-  }
-
-  const handleCancel = (event: SyntheticEvent): void => {
-    event.preventDefault()
-    history.push('/')
-  }
-
-  const updateUserClasses = useUserFormStyles()
-  const progressClasses = useProgressStyles()
-
-  return (
-    <PageContainer>
-      <>
-        <h2>User page</h2>
-
-        {
-          isLoading ? (
-            <div className={ progressClasses.progressContainer }>
-              <CircularProgress />
-            </div>
-          ) : (
-            <div>
-              {
-                !currentUser ? (
-                  <p>Error: No user found</p>
-                ) : (
-                  <>
-                    <form className={ updateUserClasses.form } onSubmit={ handleSubmit }>
-                      <Box>
-                        <CustomInput
-                          id="name"
-                          label="Name"
-                          initialValue={ name.value }
-                          handleInput={ handleInput }
-                        />
-                        <CustomInput
-                          id="age"
-                          type="number"
-                          label="Age"
-                          initialValue={ age.value }
-                          handleInput={ handleInput }
-                        />
-                        <CustomInput
-                          id="location"
-                          label="Location"
-                          initialValue={ location.value }
-                          handleInput={ handleInput }
-                        />
-                      </Box>
-                      <Box>
-                        <CustomInput
-                          id="maritalStatus"
-                          label="Marital status"
-                          select
-                          options={ maritalStatuses }
-                          initialValue={ maritalStatus.value }
-                          handleInput={ handleInput }
-                        />
-                        <CustomInput
-                          id="children"
-                          type="number"
-                          label="Children"
-                          initialValue={ children.value }
-                          handleInput={ handleInput }
-                        />
-                      </Box>
-                      <Box>
-                        <Button variant="contained" color="primary" className={ updateUserClasses.button } type="submit">
-                          Submit
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          className={ updateUserClasses.button }
-                          onClick={ handleCancel }
-                        >
-                          Cancel
-                        </Button>
-                      </Box>
-                    </form>
-                  </>
-                )
-              }
-            </div>
-          )
-        }
-      </>
-    </PageContainer>
-  )
+				{
+					isLoading ? (
+						<div className={ progressClasses.progressContainer }>
+							<CircularProgress />
+						</div>
+					) : (
+						<div>
+							{
+								!currentUser ? (
+									<p>Error: No user found</p>
+								) : (
+									<>
+										<form className={ updateUserClasses.form } onSubmit={ handleSubmit }>
+											<Box>
+												<CustomInput
+													id="name"
+													label="Name"
+													initialValue={ name.value }
+													handleInput={ handleInput }
+												/>
+												<CustomInput
+													id="age"
+													type="number"
+													label="Age"
+													initialValue={ age.value }
+													handleInput={ handleInput }
+												/>
+												<CustomInput
+													id="location"
+													label="Location"
+													initialValue={ location.value }
+													handleInput={ handleInput }
+												/>
+											</Box>
+											<Box>
+												<CustomInput
+													id="maritalStatus"
+													label="Marital status"
+													select
+													options={ maritalStatuses }
+													initialValue={ maritalStatus.value }
+													handleInput={ handleInput }
+												/>
+												<CustomInput
+													id="children"
+													type="number"
+													label="Children"
+													initialValue={ children.value }
+													handleInput={ handleInput }
+												/>
+											</Box>
+											<Box>
+												<Button variant="contained" color="primary" className={ updateUserClasses.button }
+													type="submit">
+													Submit
+												</Button>
+												<Button
+													variant="contained"
+													color="secondary"
+													className={ updateUserClasses.button }
+													onClick={ handleCancel }
+												>
+													Cancel
+												</Button>
+											</Box>
+										</form>
+									</>
+								)
+							}
+						</div>
+					)
+				}
+			</>
+		</PageContainer>
+	)
 }
 
 export default EditUser

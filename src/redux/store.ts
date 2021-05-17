@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware} from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension/index'
 import logger from 'redux-logger'
 import rootReducer from './reducers/rootReducer'
@@ -6,7 +6,7 @@ import rootReducer from './reducers/rootReducer'
 const middlewares = []
 
 if (process.env.NODE_ENV === 'development') {
-  middlewares.push(logger)
+	middlewares.push(logger)
 }
 
 const composedEnhancer = composeWithDevTools(applyMiddleware(...middlewares))

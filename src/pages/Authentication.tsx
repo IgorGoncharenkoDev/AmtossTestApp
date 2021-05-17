@@ -14,61 +14,61 @@ import { TAuthContext } from '../contexts/authContext'
 import { useBaseStyles, useUserFormStyles } from '../styles/styles'
 
 const Authentication: FunctionComponent = () => {
-  const history = useHistory()
-  const auth: TAuthContext = useContext(AuthContext)
+	const history = useHistory()
+	const auth: TAuthContext = useContext(AuthContext)
 
-  const [ handleInput, formState, setFormData ] = useForm({
-    inputFields: {
-      email: { value: '' },
-      password: { value: '' },
-    }
-  })
+	const [ handleInput, formState ] = useForm({
+		inputFields: {
+			email: { value: '' },
+			password: { value: '' },
+		}
+	})
 
-  const handleFormSubmit = (event: SyntheticEvent): void => {
-    event.preventDefault()
+	const handleFormSubmit = (event: SyntheticEvent): void => {
+		event.preventDefault()
 
-    const { email, password } = formState.inputFields
+		const { email, password } = formState.inputFields
 
-    console.log(`User logged in with email: '${ email }' and password: '${ password }'`)
+		console.log(`User logged in with email: '${ email }' and password: '${ password }'`)
 
-    auth.login()
-    history.push('/')
-  }
+		auth.login()
+		history.push('/')
+	}
 
-  const baseClasses = useBaseStyles()
-  const classes = useUserFormStyles()
+	const baseClasses = useBaseStyles()
+	const classes = useUserFormStyles()
 
-  return (
-    <PageContainer>
-      <Paper elevation={ 3 } className={ baseClasses.paper }>
-        <form className={ classes.form } onSubmit={ handleFormSubmit }>
-          <Box>
-            <CustomInput
-              id="email"
-              label="Email"
-              handleInput={ handleInput }
-            />
-            <CustomInput
-              id="password"
-              label="Password"
-              handleInput={ handleInput }
-            />
-          </Box>
-          <Box>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={ classes.button }
-            >
-              Submit
-            </Button>
-          </Box>
-        </form>
-      </Paper>
-    </PageContainer>
+	return (
+		<PageContainer>
+			<Paper elevation={ 3 } className={ baseClasses.paper }>
+				<form className={ classes.form } onSubmit={ handleFormSubmit }>
+					<Box>
+						<CustomInput
+							id="email"
+							label="Email"
+							handleInput={ handleInput }
+						/>
+						<CustomInput
+							id="password"
+							label="Password"
+							handleInput={ handleInput }
+						/>
+					</Box>
+					<Box>
+						<Button
+							type="submit"
+							variant="contained"
+							color="primary"
+							className={ classes.button }
+						>
+							Submit
+						</Button>
+					</Box>
+				</form>
+			</Paper>
+		</PageContainer>
 
-  )
+	)
 }
 
 export default Authentication

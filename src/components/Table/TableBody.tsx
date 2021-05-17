@@ -11,76 +11,76 @@ import { useTableStyles } from '../../styles/styles'
 import { TUser } from '../../types/types'
 
 interface IProps {
-  data: Array<TUser>
+	data: Array<TUser>
 }
 
 const TableBody: FunctionComponent<IProps> = (props) => {
-  const { data } = props
-  const { push } = useHistory()
-  const dispatch = useDispatch()
+	const { data } = props
+	const { push } = useHistory()
+	const dispatch = useDispatch()
 
-  const handleRedirectToUserEditPage = (id: string): void => {
-    push(`/user/edit/${ id }`)
-  }
+	const handleRedirectToUserEditPage = (id: string): void => {
+		push(`/user/edit/${ id }`)
+	}
 
-  const handleRemove = (event: React.SyntheticEvent, userId: string) => {
-    event.stopPropagation()
+	const handleRemove = (event: React.SyntheticEvent, userId: string) => {
+		event.stopPropagation()
 
-    dispatch(removeUser(userId))
-  }
+		dispatch(removeUser(userId))
+	}
 
-  const classes = useTableStyles()
+	const classes = useTableStyles()
 
-  return (
-    <div>
-      {
-        data.length ? data.map((item: any, index: number) => {
-          const { id, name, age, location, maritalStatus, children } = item
+	return (
+		<div>
+			{
+				data.length ? data.map((item: any, index: number) => {
+					const { id, name, age, location, maritalStatus, children } = item
 
-          return (
-            <div
-              className={ clsx(classes.tableRow, classes.tableBodyRow) }
-              key={ index }
-              onClick={ () => handleRedirectToUserEditPage(id) }
-            >
-              <div className={ classes.tableCell }>
-                <span>{ name }</span>
-              </div>
-              <div className={ classes.tableCell }>
-                <span>{ age }</span>
-              </div>
-              <div className={ classes.tableCell }>
-                <span>{ location }</span>
-              </div>
-              <div className={ classes.tableCell }>
-                <span>{ maritalStatus }</span>
-              </div>
-              <div className={ classes.tableCell }>
-                <span>{ children }</span>
-              </div>
-              <div className={ classes.tableCell }>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={ (event: React.SyntheticEvent) => handleRemove(event, id) }
-                >
-                  Remove user
-                </Button>
-              </div>
-            </div>
-          )
-        }) : (
-          <div className={ clsx(classes.tableRow, classes.tableBodyRow) }>
-            <div className={ classes.tableCell }>
-              <p>No relevant data yet</p>
-            </div>
-          </div>
+					return (
+						<div
+							className={ clsx(classes.tableRow, classes.tableBodyRow) }
+							key={ index }
+							onClick={ () => handleRedirectToUserEditPage(id) }
+						>
+							<div className={ classes.tableCell }>
+								<span>{ name }</span>
+							</div>
+							<div className={ classes.tableCell }>
+								<span>{ age }</span>
+							</div>
+							<div className={ classes.tableCell }>
+								<span>{ location }</span>
+							</div>
+							<div className={ classes.tableCell }>
+								<span>{ maritalStatus }</span>
+							</div>
+							<div className={ classes.tableCell }>
+								<span>{ children }</span>
+							</div>
+							<div className={ classes.tableCell }>
+								<Button
+									variant="contained"
+									color="secondary"
+									onClick={ (event: React.SyntheticEvent) => handleRemove(event, id) }
+								>
+									Remove user
+								</Button>
+							</div>
+						</div>
+					)
+				}) : (
+					<div className={ clsx(classes.tableRow, classes.tableBodyRow) }>
+						<div className={ classes.tableCell }>
+							<p>No relevant data yet</p>
+						</div>
+					</div>
 
-        )
+				)
 
-      }
-    </div>
-  )
+			}
+		</div>
+	)
 }
 
 export default TableBody

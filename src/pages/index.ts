@@ -9,12 +9,12 @@ import NewUser from './NewUser'
 
 
 export {
-  PageContainer,
-  Landing,
-  Authentication,
-  Logout,
-  Home,
-  ContactUs,
-  EditUser,
-  NewUser
+	PageContainer,
+	Landing,
+	Authentication,
+	Logout,
+	Home,
+	ContactUs,
+	EditUser,
+	NewUser
 }

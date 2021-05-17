@@ -4,38 +4,38 @@ import updateUser from '../utils/updateUser'
 import removeUser from '../utils/removeUser'
 
 const initialState = {
-  usersList: usersListStub
+	usersList: usersListStub
 }
 
 const usersReducer = (
-  state: any = initialState,
-  action: any
-) => {
-  switch (action.type) {
-    case actionTypes.ADD_USER:
-      return {
-        ...state,
-        usersList: [
-          ...state.usersList,
-          action.payload
-        ]
-      }
+	state: any = initialState,
+	action: any
+): any => {
+	switch (action.type) {
+		case actionTypes.ADD_USER:
+			return {
+				...state,
+				usersList: [
+					...state.usersList,
+					action.payload
+				]
+			}
 
-    case actionTypes.UPDATE_USER:
-      return {
-        ...state,
-        usersList: updateUser(state.usersList, action.payload)
-      }
+		case actionTypes.UPDATE_USER:
+			return {
+				...state,
+				usersList: updateUser(state.usersList, action.payload)
+			}
 
-    case actionTypes.REMOVE_USER:
-      return {
-        ...state,
-        usersList: removeUser(state.usersList, action.payload)
-      }
+		case actionTypes.REMOVE_USER:
+			return {
+				...state,
+				usersList: removeUser(state.usersList, action.payload)
+			}
 
-    default:
-      return state
-  }
+		default:
+			return state
+	}
 }
 
 export default usersReducer

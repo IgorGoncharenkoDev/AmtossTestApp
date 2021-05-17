@@ -13,36 +13,36 @@ import './styles/styles.scss'
 
 
 const App: FunctionComponent = () => {
-  const [ isLoggedIn, setIsLoggedIn ] = useState<boolean>(false)
-  const [ activeMenuTab, setActiveMenuTab ] = useState<number>(0)
+	const [ isLoggedIn, setIsLoggedIn ] = useState<boolean>(false)
+	const [ activeMenuTab, setActiveMenuTab ] = useState<number>(0)
 
-  const classes = useBaseStyles()
+	const classes = useBaseStyles()
 
-  const login = useCallback(() => {
-    setIsLoggedIn(true)
-  }, [])
+	const login = useCallback(() => {
+		setIsLoggedIn(true)
+	}, [])
 
-  const logout = useCallback(() => {
-    setIsLoggedIn(false)
-  }, [])
+	const logout = useCallback(() => {
+		setIsLoggedIn(false)
+	}, [])
 
-  return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
-      <MuiThemeProvider theme={ theme }>
-        <div className={ classes.app }>
-          <BrowserRouter>
-            <Header
-              activeMenuTab={ activeMenuTab }
-              handleChangeMenuTab={ setActiveMenuTab }
-            />
-            <main>
-              <AppRoutes isLoggedIn={ isLoggedIn } />
-            </main>
-          </BrowserRouter>
-        </div>
-      </MuiThemeProvider>
-    </AuthContext.Provider>
-  )
+	return (
+		<AuthContext.Provider value={ { isLoggedIn, login, logout } }>
+			<MuiThemeProvider theme={ theme }>
+				<div className={ classes.app }>
+					<BrowserRouter>
+						<Header
+							activeMenuTab={ activeMenuTab }
+							handleChangeMenuTab={ setActiveMenuTab }
+						/>
+						<main>
+							<AppRoutes isLoggedIn={ isLoggedIn }/>
+						</main>
+					</BrowserRouter>
+				</div>
+			</MuiThemeProvider>
+		</AuthContext.Provider>
+	)
 }
 
 export default App

@@ -53,6 +53,10 @@
   },
   "devDependencies": {
     "@types/redux-logger": "^3.0.8",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "eslint": "^7.26.0",
+    "eslint-plugin-react": "^7.23.2",
     "redux-devtools-extension": "^2.13.9",
     "redux-logger": "^3.0.6"
   }

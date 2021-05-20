@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { CircularProgress, Box, Button } from '@material-ui/core'
 
-import { PageContainer } from '../pages'
+import { PageContainer } from './index'
 import CustomInput from '../components/CustomInput'
 
 import useForm from '../hooks/useForm'

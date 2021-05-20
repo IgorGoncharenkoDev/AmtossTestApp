@@ -1,7 +1,7 @@
 import React, { useState, Fragment, FunctionComponent } from 'react'
 import { useHistory } from 'react-router-dom'
 
-import { PageContainer } from '../pages'
+import { PageContainer } from './index'
 import UsersTable from '../components/UsersTable'
 import { Box, TextField, Button, Typography } from '@material-ui/core'
 

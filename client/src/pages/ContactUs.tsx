@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { PageContainer } from '../pages'
+import { PageContainer } from './index'
 
 const ContactUs: FunctionComponent = () => {
 	return (

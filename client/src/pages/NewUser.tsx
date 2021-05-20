@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { Paper, Box, Button } from '@material-ui/core'
 import { v4 as uuidv4 } from 'uuid'
 
-import { PageContainer } from '../pages'
+import { PageContainer } from './index'
 import { maritalStatuses } from '../constants'
 import CustomInput from '../components/CustomInput'
 import useForm from '../hooks/useForm'

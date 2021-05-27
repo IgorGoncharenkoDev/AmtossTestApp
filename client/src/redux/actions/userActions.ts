@@ -1,6 +1,11 @@
 import { actionTypes } from './actionTypes'
 import { TUser } from '../../types/types'
 
+type setUsers = (usersList: Array<TUser>) => {
+	type: string,
+	payload: Array<TUser>
+}
+
 type TAddUser = (userData: TUser) => {
 	type: string,
 	payload: TUser
@@ -23,8 +28,14 @@ export const addUser: TAddUser = (user) => {
 	}
 }
 
+export const setUsers: setUsers = (usersList) => {
+	return {
+		type: actionTypes.SET_USERS,
+		payload: usersList
+	}
+}
+
 export const updateUser: TUpdateUser = (user) => {
-	console.log('UPDATE USER ACTION =>', user)
 	return {
 		type: actionTypes.UPDATE_USER,
 		payload: user

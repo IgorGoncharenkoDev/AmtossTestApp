@@ -1,18 +1,18 @@
 import React, { useState, useEffect, FunctionComponent, SyntheticEvent } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { CircularProgress, Box, Button } from '@material-ui/core'
 
 import { PageContainer } from './index'
 import CustomInput from '../components/CustomInput'
 
 import useForm from '../hooks/useForm'
+import useUsers from '../hooks/useUsers'
 
 import { updateUser } from '../redux/actions/userActions'
 
 import { maritalStatuses } from '../constants'
 
-import { TRootState } from '../types/types'
 import { TUser } from '../types/types'
 
 import { useUserFormStyles, useProgressStyles } from '../styles/styles'
@@ -29,9 +29,8 @@ const EditUser: FunctionComponent = () => {
 	const params: TParams = useParams()
 	const userId = params.id
 
-	const { usersList } = useSelector((state: TRootState) => state.users)
-
-	const currentUser: TUser | undefined = usersList.find(({ id }: TUser) => id === userId)
+	const { getCurrentUser } = useUsers()
+	const currentUser: TUser | undefined = getCurrentUser(userId)
 
 	const [ handleInput, formState, setFormData ] = useForm({
 		id: '',

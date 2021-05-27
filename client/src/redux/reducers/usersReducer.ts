@@ -7,10 +7,7 @@ const initialState = {
 	usersList: usersListStub
 }
 
-const usersReducer = (
-	state: any = initialState,
-	action: any
-): any => {
+const usersReducer = (state: any = initialState, action: any): any => {
 	switch (action.type) {
 		case actionTypes.ADD_USER:
 			return {

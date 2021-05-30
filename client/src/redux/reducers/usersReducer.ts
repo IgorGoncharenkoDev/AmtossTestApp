@@ -17,6 +17,7 @@ const initialState = {
 
 const usersReducer = (state: IState = initialState, action: any): any => {
 	switch (action.type) {
+		case actionTypes.FETCH_USER_START:
 		case actionTypes.FETCH_USERS_START:
 		case actionTypes.ADD_USER_START:
 		case actionTypes.EDIT_USER_START:
@@ -25,6 +26,7 @@ const usersReducer = (state: IState = initialState, action: any): any => {
 				...state,
 				isLoading: true
 			}
+		case actionTypes.FETCH_USER_FAILURE:
 		case actionTypes.FETCH_USERS_FAILURE:
 		case actionTypes.ADD_USER_FAILURE:
 		case actionTypes.EDIT_USER_FAILURE:
@@ -33,6 +35,12 @@ const usersReducer = (state: IState = initialState, action: any): any => {
 				...state,
 				isLoading: false,
 				errorMessage: action.payload.errorMessage
+			}
+		case actionTypes.FETCH_USER_SUCCESS:
+			return {
+				...state,
+				usersList: [ action.payload ],
+				isLoading: false
 			}
 		case actionTypes.FETCH_USERS_SUCCESS:
 			return {

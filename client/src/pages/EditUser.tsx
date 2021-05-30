@@ -9,8 +9,6 @@ import CustomInput from '../components/CustomInput'
 import useForm from '../hooks/useForm'
 import useUsers from '../hooks/useUsers'
 
-// import { updateUser } from '../redux/actions/userActions'
-
 import { maritalStatuses } from '../constants'
 
 import { IUser } from '../types/types'
@@ -29,7 +27,7 @@ const EditUser: FunctionComponent = () => {
 	const params: TParams = useParams()
 	const userId = params.id
 
-	const { getCurrentUser, updateUser } = useUsers()
+	const { retrieveUser, getCurrentUser, updateUser } = useUsers()
 	const currentUser: IUser | undefined = getCurrentUser(userId)
 
 	const [ handleInput, formState, setFormData ] = useForm({
@@ -43,6 +41,10 @@ const EditUser: FunctionComponent = () => {
 		},
 	})
 	const { name, age, location, maritalStatus, children } = formState.inputFields
+
+	useEffect(() => {
+		dispatch(retrieveUser(userId))
+	}, [ retrieveUser, userId ])
 
 	useEffect(() => {
 		if (!currentUser) {

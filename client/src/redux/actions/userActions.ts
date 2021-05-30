@@ -4,28 +4,13 @@ import { actionTypes } from './actionTypes'
 import api from '../../api'
 import { IUser } from '../../types/types'
 
-// type TAddUser = (userData: IUser) => {
-// 	type: string,
-// 	payload: IUser
-// }
-
-// type TUpdateUser = (userData: IUser) => {
-// 	type: string,
-// 	payload: IUser
-// }
-
-// type TRemoveUser = (userId: string) => {
-// 	type: string,
-// 	payload: string
-// }
-
-export const fetchUsers = () => {
+export const fetchUser = (userId: string) => {
 	return (dispatch: Dispatch) => {
 		dispatch(fetchUserStart())
 
 		try {
-			api.get('/users')
-				.then((users: Array<IUser>) => dispatch(fetchUserSuccess(users)))
+			api.get(`/users/${ userId }`)
+				.then((user: IUser) => dispatch(fetchUserSuccess(user)))
 		}
 		catch (error) {
 			dispatch(fetchUserFailure(error.message))
@@ -35,15 +20,44 @@ export const fetchUsers = () => {
 }
 
 const fetchUserStart = () => ({
+	type: actionTypes.FETCH_USER_START
+})
+
+const fetchUserSuccess = (user: IUser) => ({
+	type: actionTypes.FETCH_USER_SUCCESS,
+	payload: user
+})
+
+const fetchUserFailure = (errorMessage: string) => ({
+	type: actionTypes.FETCH_USER_FAILURE,
+	payload: errorMessage
+})
+
+export const fetchUsers = () => {
+	return (dispatch: Dispatch) => {
+		dispatch(fetchUsersStart())
+
+		try {
+			api.get('/users')
+				.then((users: Array<IUser>) => dispatch(fetchUsersSuccess(users)))
+		}
+		catch (error) {
+			dispatch(fetchUsersFailure(error.message))
+			console.log(error)
+		}
+	}
+}
+
+const fetchUsersStart = () => ({
 	type: actionTypes.FETCH_USERS_START
 })
 
-const fetchUserSuccess = (users: Array<IUser>) => ({
+const fetchUsersSuccess = (users: Array<IUser>) => ({
 	type: actionTypes.FETCH_USERS_SUCCESS,
 	payload: users
 })
 
-const fetchUserFailure = (errorMessage: string) => ({
+const fetchUsersFailure = (errorMessage: string) => ({
 	type: actionTypes.FETCH_USERS_FAILURE,
 	payload: errorMessage
 })

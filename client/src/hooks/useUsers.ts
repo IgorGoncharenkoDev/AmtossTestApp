@@ -3,13 +3,14 @@ import { Dispatch } from 'redux'
 import { useSelector } from 'react-redux'
 import { TRootState } from '../types/types'
 import { IUser } from '../types/types'
-import { fetchUsers, addUser, editUser, removeUser } from '../redux/actions/userActions'
+import { fetchUser, fetchUsers, addUser, editUser, removeUser } from '../redux/actions/userActions'
 
 type TGetCurrentUser = (userId: string) => IUser | undefined
 
 type TUseUsers = (userQueryString?: string) => {
 	filteredUsersList: Array<IUser>
 	getCurrentUser: TGetCurrentUser
+	retrieveUser: (userId: string) => (dispatch: Dispatch) => void
 	retrieveUsers: () => (dispatch: Dispatch) => void
 	createUser: (user: Omit<IUser, 'id'>) => (dispatch: Dispatch) => void
 	updateUser: (userId: string, user: Partial<IUser>) => (dispatch: Dispatch) => void
@@ -38,6 +39,10 @@ const useUsers: TUseUsers = (userQueryString = '') => {
 	const getCurrentUser: TGetCurrentUser = (userId) =>
 		usersList.find(({ id }: IUser) => id === userId)
 
+	const retrieveUser = useCallback((userId: string) => {
+		return fetchUser(userId)
+	}, [])
+
 	const retrieveUsers = useCallback(() => {
 		return fetchUsers()
 	}, [])
@@ -57,6 +62,7 @@ const useUsers: TUseUsers = (userQueryString = '') => {
 	return {
 		filteredUsersList,
 		getCurrentUser,
+		retrieveUser,
 		retrieveUsers,
 		createUser,
 		updateUser,

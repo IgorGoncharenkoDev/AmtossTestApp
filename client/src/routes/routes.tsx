@@ -19,7 +19,6 @@ const AppRoutes: FunctionComponent<TProps> = (props) => {
 						<Route path="/user/new" component={ NewUser } />
 						<Route path="/user/edit/:id" component={ EditUser } />
 						<Route path="/logout" component={ Logout } />
-						<Redirect to="/" />
 					</>
 				) : (
 					<>

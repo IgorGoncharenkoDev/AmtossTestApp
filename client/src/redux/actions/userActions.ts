@@ -3,6 +3,7 @@ import { /*ActionCreator, Action,*/ Dispatch } from 'redux'
 import { actionTypes } from './actionTypes'
 import api from '../../api'
 import { IUser } from '../../types/types'
+import { isEmpty } from 'ramda'
 
 export const fetchUser = (userId: string) => {
 	return (dispatch: Dispatch) => {
@@ -39,7 +40,13 @@ export const fetchUsers = () => {
 
 		try {
 			api.get('/users')
-				.then((users: Array<IUser>) => dispatch(fetchUsersSuccess(users)))
+				.then((users: Array<IUser>) => {
+					if (isEmpty(users)) {
+						dispatch(fetchUsersSuccess([]))
+						return
+					}
+					dispatch(fetchUsersSuccess(users))
+				})
 		}
 		catch (error) {
 			dispatch(fetchUsersFailure(error.message))

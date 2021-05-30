@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import faker from 'faker'
 import { maritalStatuses } from '../constants'
-import { TUser } from '../types/types'
+import { IUser } from '../types/types'
 
 const getRandomInteger = (min: number, max: number): number =>
 	Math.floor(Math.random() * (max - min + 1) + min)
@@ -9,7 +9,7 @@ const getRandomInteger = (min: number, max: number): number =>
 const getRandomMaritalStatus = (): string =>
 	maritalStatuses[ getRandomInteger(0, 2) ]
 
-export const getUsersList = (usersNumber: number): Array<TUser> => {
+export const getUsersList = (usersNumber: number): Array<IUser> => {
 	const user = () => ({
 		id: uuidv4(),
 		name: `${ faker.name.firstName() } ${ faker.name.lastName() }`,

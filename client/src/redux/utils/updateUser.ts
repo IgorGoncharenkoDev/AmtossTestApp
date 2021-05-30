@@ -1,6 +1,6 @@
-import { TUser } from '../../types/types'
+import { IUser } from '../../types/types'
 
-type TUpdateUser = (usersList: Array<TUser>, userToUpdate: TUser) => Array<TUser>
+type TUpdateUser = (usersList: Array<IUser>, userToUpdate: IUser) => Array<IUser>
 
 const updateUser: TUpdateUser = (usersList, userToUpdate) =>
 	usersList.map(existingUser => {

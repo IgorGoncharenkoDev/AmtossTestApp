@@ -1,33 +1,62 @@
 import { actionTypes } from '../actions/actionTypes'
-import { usersListStub } from '../../stubs/stubs'
+import { IUser } from '../../types/types'
 import updateUser from '../utils/updateUser'
 import removeUser from '../utils/removeUser'
 
-const initialState = {
-	usersList: usersListStub
+interface IState {
+	usersList: Array<IUser>
+	isLoading: boolean
+	errorMessage: string
 }
 
-const usersReducer = (state: any = initialState, action: any): any => {
+const initialState = {
+	usersList: [],
+	isLoading: false,
+	errorMessage: ''
+}
+
+const usersReducer = (state: IState = initialState, action: any): any => {
 	switch (action.type) {
-		case actionTypes.ADD_USER:
+		case actionTypes.FETCH_USERS_START:
+		case actionTypes.ADD_USER_START:
+		case actionTypes.EDIT_USER_START:
+		case actionTypes.REMOVE_USER_START:
 			return {
 				...state,
-				usersList: [
-					...state.usersList,
-					action.payload
-				]
+				isLoading: true
 			}
-
-		case actionTypes.UPDATE_USER:
+		case actionTypes.FETCH_USERS_FAILURE:
+		case actionTypes.ADD_USER_FAILURE:
+		case actionTypes.EDIT_USER_FAILURE:
+		case actionTypes.REMOVE_USER_FAILURE:
 			return {
 				...state,
-				usersList: updateUser(state.usersList, action.payload)
+				isLoading: false,
+				errorMessage: action.payload.errorMessage
 			}
-
-		case actionTypes.REMOVE_USER:
+		case actionTypes.FETCH_USERS_SUCCESS:
 			return {
 				...state,
-				usersList: removeUser(state.usersList, action.payload)
+				usersList: action.payload,
+				isLoading: false
+			}
+		case actionTypes.ADD_USER_SUCCESS:
+			return {
+				...state,
+				usersList: [ ...state.usersList, action.payload ],
+				errorMessage: ''
+			}
+		case actionTypes.EDIT_USER_SUCCESS:
+			return {
+				...state,
+				usersList: updateUser(state.usersList, action.payload),
+				isLoading: false
+			}
+		case actionTypes.REMOVE_USER_SUCCESS:
+			return {
+				...state,
+				usersList: removeUser(state.usersList, action.payload),
+				isLoading: false
 			}
 
 		default:

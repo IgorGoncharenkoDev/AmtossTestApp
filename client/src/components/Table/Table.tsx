@@ -3,11 +3,11 @@ import React, { FunctionComponent } from 'react'
 import TableHead from './TableHead'
 import TableBody from './TableBody'
 
-import { TUser } from '../../types/types'
+import { IUser } from '../../types/types'
 
 interface IProps {
 	columns: Array<string>
-	data: Array<TUser>
+	data: Array<IUser>
 }
 
 const Table: FunctionComponent<IProps> = (props) => {

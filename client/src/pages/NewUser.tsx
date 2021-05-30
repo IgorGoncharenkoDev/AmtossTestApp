@@ -2,19 +2,17 @@ import React, { FunctionComponent, SyntheticEvent } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Paper, Box, Button } from '@material-ui/core'
-import { v4 as uuidv4 } from 'uuid'
-
 import { PageContainer } from './index'
 import { maritalStatuses } from '../constants'
 import CustomInput from '../components/CustomInput'
 import useForm from '../hooks/useForm'
-
+import useUsers from '../hooks/useUsers'
 import { useBaseStyles, useUserFormStyles } from '../styles/styles'
-import { addUser } from '../redux/actions/userActions'
 
 const NewUser: FunctionComponent<Record<string, never>> = () => {
 	const history = useHistory()
 	const dispatch = useDispatch()
+	const { createUser } = useUsers()
 
 	const [ handleInput, formState ] = useForm({
 		id: '',
@@ -33,7 +31,6 @@ const NewUser: FunctionComponent<Record<string, never>> = () => {
 		const { name, age, location, maritalStatus, children } = formState.inputFields
 
 		const user = {
-			id: uuidv4(),
 			name: name.value,
 			age: age.value,
 			location: location.value,
@@ -41,7 +38,7 @@ const NewUser: FunctionComponent<Record<string, never>> = () => {
 			children: children.value
 		}
 
-		dispatch(addUser(user))
+		dispatch(createUser(user))
 
 		history.push('/')
 	}

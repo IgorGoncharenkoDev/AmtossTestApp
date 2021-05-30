@@ -9,11 +9,11 @@ import CustomInput from '../components/CustomInput'
 import useForm from '../hooks/useForm'
 import useUsers from '../hooks/useUsers'
 
-import { updateUser } from '../redux/actions/userActions'
+// import { updateUser } from '../redux/actions/userActions'
 
 import { maritalStatuses } from '../constants'
 
-import { TUser } from '../types/types'
+import { IUser } from '../types/types'
 
 import { useUserFormStyles, useProgressStyles } from '../styles/styles'
 
@@ -29,8 +29,8 @@ const EditUser: FunctionComponent = () => {
 	const params: TParams = useParams()
 	const userId = params.id
 
-	const { getCurrentUser } = useUsers()
-	const currentUser: TUser | undefined = getCurrentUser(userId)
+	const { getCurrentUser, updateUser } = useUsers()
+	const currentUser: IUser | undefined = getCurrentUser(userId)
 
 	const [ handleInput, formState, setFormData ] = useForm({
 		id: '',
@@ -62,15 +62,12 @@ const EditUser: FunctionComponent = () => {
 			}
 		}
 
-		console.log('formDataToUpdate =>', formDataToUpdate)
-
 		setFormData(formDataToUpdate)
 
 		setIsLoading(false)
 	}, [ currentUser ])
 
 	const handleSubmit = (event: React.SyntheticEvent) => {
-		console.log('handleSubmit =>', formState.inputFields)
 		event.preventDefault()
 
 		if (!currentUser) {
@@ -86,7 +83,7 @@ const EditUser: FunctionComponent = () => {
 			children: children.value
 		}
 
-		dispatch(updateUser({ ...updatedUser }))
+		dispatch(updateUser(currentUser.id, { ...updatedUser }))
 		history.push('/')
 	}
 

@@ -2,13 +2,13 @@ import { partial } from 'ramda'
 
 type TMethod = 'POST' | 'PUT' | 'PATCH'
 
-const baseUrl = 'http://localhost:3010'
+const baseUrl = 'http://localhost:4000'
 
 const get = (url: string) =>
 	fetch(`${ baseUrl }${ url }`, {
 		method: 'GET'
 	})
-		.then((response) => response.json())
+		.then((response: Response) => response.json())
 
 export const postPutPatch = (
 	method: TMethod,
@@ -22,6 +22,7 @@ export const postPutPatch = (
 			'Content-Type': 'application/json'
 		}
 	})
+		.then((response: Response) => response.json())
 
 export const post = partial(postPutPatch, [ 'POST' ])
 

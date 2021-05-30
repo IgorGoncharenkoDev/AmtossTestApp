@@ -1,4 +1,4 @@
-export type TUser = {
+export interface IUser {
   id: string
   name: string
   age: string
@@ -7,8 +7,10 @@ export type TUser = {
   children: string
 }
 
+type TUsersState = {
+  usersList: Array<IUser>
+}
+
 export type TRootState = {
-  users: {
-    usersList: Array<TUser>
-  }
+  users: TUsersState
 }

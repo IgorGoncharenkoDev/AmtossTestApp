@@ -4,20 +4,21 @@ import { useDispatch } from 'react-redux'
 import clsx from 'clsx'
 import { Button } from '@material-ui/core'
 
-import { removeUser } from '../../redux/actions/userActions'
+import useUsers from '../../hooks/useUsers'
 
 import { useTableStyles } from '../../styles/styles'
 
-import { TUser } from '../../types/types'
+import { IUser } from '../../types/types'
 
 interface IProps {
-	data: Array<TUser>
+	data: Array<IUser>
 }
 
 const TableBody: FunctionComponent<IProps> = (props) => {
 	const { data } = props
 	const { push } = useHistory()
 	const dispatch = useDispatch()
+	const { deleteUser } = useUsers()
 
 	const handleRedirectToUserEditPage = (id: string): void => {
 		push(`/user/edit/${ id }`)
@@ -25,8 +26,7 @@ const TableBody: FunctionComponent<IProps> = (props) => {
 
 	const handleRemove = (event: React.SyntheticEvent, userId: string) => {
 		event.stopPropagation()
-
-		dispatch(removeUser(userId))
+		dispatch(deleteUser(userId))
 	}
 
 	const classes = useTableStyles()

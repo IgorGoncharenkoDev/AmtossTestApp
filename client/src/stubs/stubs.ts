@@ -1,4 +1,4 @@
 import { getUsersList } from '../utils/getUsersList'
-import { TUser } from '../types/types'
+import { IUser } from '../types/types'
 
-export const usersListStub: Array<TUser> = getUsersList(3)
+export const usersListStub: Array<IUser> = getUsersList(3)

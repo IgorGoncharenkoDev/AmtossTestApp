@@ -13,7 +13,7 @@ import './styles/styles.scss'
 
 
 const App: FunctionComponent = () => {
-	const [ isLoggedIn, setIsLoggedIn ] = useState<boolean>(true)
+	const [ isLoggedIn, setIsLoggedIn ] = useState<boolean>(false)
 	const [ activeMenuTab, setActiveMenuTab ] = useState<number>(0)
 
 	const classes = useBaseStyles()

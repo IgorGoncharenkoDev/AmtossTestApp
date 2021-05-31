@@ -42,7 +42,7 @@ export const fetchUsers = () => {
 			api.get('/users')
 				.then((users: Array<IUser>) => {
 					if (isEmpty(users)) {
-						dispatch(fetchUsersSuccess([]))
+						dispatch(fetchUsersFailure('Something went wrong, the data was not fetched'))
 						return
 					}
 					dispatch(fetchUsersSuccess(users))

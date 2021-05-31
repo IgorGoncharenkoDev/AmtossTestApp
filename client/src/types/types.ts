@@ -9,6 +9,8 @@ export interface IUser {
 
 type TUsersState = {
   usersList: Array<IUser>
+  isLoading: boolean
+  errorMessage: string
 }
 
 export type TRootState = {

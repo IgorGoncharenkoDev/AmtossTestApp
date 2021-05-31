@@ -10,33 +10,58 @@ const actionTypes: TActionTypes = {
 }
 
 type TValues = {
-	id?: string
-	inputFields: {
-		[ key: string ]: {
-			value: string
-		}
+	[ key: string ]: {
+		value: string,
+		isValid: boolean
 	}
 }
 
-const useForm = (initialValues: TValues): [(id: string, value: string) => void, TValues, (formData: TValues) => void] => {
-	const initialState = initialValues
+type TUseForm = (initialValues: TValues, initialFormValidity: boolean) => [
+	(id: string, value: string, initialFormValidity: boolean) => void,
+	any,
+	(initialInputs: TValues, initialFormValidity: boolean) => void
+]
+
+const useForm: TUseForm = (initialValues, initialFormValidity) => {
+	const initialState = {
+		inputs: initialValues,
+		formIsValid: initialFormValidity
+	}
 
 	const reducer = (state: any, action: any) => {
 		switch (action.type) {
 			case actionTypes.INPUT_CHANGE:
+				// eslint-disable-next-line no-case-declarations
+				let formIsValid = true
+
+				for (const inputId in state.inputs) {
+					if (!state.inputs[inputId]) {
+						continue
+					}
+					if (inputId === action.payload.id) {
+						formIsValid = formIsValid && action.payload.isValid
+					}
+					else {
+						formIsValid = formIsValid && state.inputs[inputId].isValid
+					}
+				}
+
 				return {
 					...state,
-					inputFields: {
-						...state.inputFields,
+					inputs: {
+						...state.inputs,
 						[ action.payload.id ]: {
 							value: action.payload.value,
+							isValid: action.payload.isValid
 						},
-					}
+					},
+					formIsValid: formIsValid
 				}
 
 			case actionTypes.SET_DATA:
 				return {
-					inputFields: action.payload.inputFields
+					inputs: action.payload.inputs,
+					formIsValid: action.payload.formIsValid
 				}
 
 			default:
@@ -46,17 +71,20 @@ const useForm = (initialValues: TValues): [(id: string, value: string) => void, 
 
 	const [ state, dispatch ] = useReducer(reducer, initialState)
 
-	const handleInput = useCallback((id: string, value: string): void => {
+	const handleInput = useCallback((id: string, value: string, isValid: boolean): void => {
 		dispatch({
 			type: actionTypes.INPUT_CHANGE,
-			payload: { id, value }
+			payload: { id, value, isValid }
 		})
 	}, [])
 
-	const setFormData = useCallback((formData: TValues): void => {
+	const setFormData = useCallback((initialInputs: TValues, initialFormValidity: boolean): void => {
 		dispatch({
 			type: actionTypes.SET_DATA,
-			payload: formData
+			payload: {
+				inputs: initialInputs,
+				formIsValid: initialFormValidity
+			}
 		})
 	}, [])
 

@@ -27,26 +27,34 @@ const usersReducer = (state: IState = initialState, action: any): any => {
 				isLoading: true
 			}
 		case actionTypes.FETCH_USER_FAILURE:
-		case actionTypes.FETCH_USERS_FAILURE:
 		case actionTypes.ADD_USER_FAILURE:
 		case actionTypes.EDIT_USER_FAILURE:
 		case actionTypes.REMOVE_USER_FAILURE:
 			return {
 				...state,
 				isLoading: false,
-				errorMessage: action.payload.errorMessage
+				errorMessage: action.payload
+			}
+		case actionTypes.FETCH_USERS_FAILURE:
+			return {
+				...state,
+				isLoading: false,
+				usersList: [],
+				errorMessage: action.payload
 			}
 		case actionTypes.FETCH_USER_SUCCESS:
 			return {
 				...state,
 				usersList: [ action.payload ],
-				isLoading: false
+				isLoading: false,
+				errorMessage: ''
 			}
 		case actionTypes.FETCH_USERS_SUCCESS:
 			return {
 				...state,
 				usersList: action.payload,
-				isLoading: false
+				isLoading: false,
+				errorMessage: ''
 			}
 		case actionTypes.ADD_USER_SUCCESS:
 			return {
@@ -58,13 +66,15 @@ const usersReducer = (state: IState = initialState, action: any): any => {
 			return {
 				...state,
 				usersList: updateUser(state.usersList, action.payload),
-				isLoading: false
+				isLoading: false,
+				errorMessage: ''
 			}
 		case actionTypes.REMOVE_USER_SUCCESS:
 			return {
 				...state,
 				usersList: removeUser(state.usersList, action.payload),
-				isLoading: false
+				isLoading: false,
+				errorMessage: ''
 			}
 
 		default:

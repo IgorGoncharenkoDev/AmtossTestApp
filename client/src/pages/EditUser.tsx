@@ -28,7 +28,7 @@ const EditUser: FunctionComponent = () => {
 	const params: TParams = useParams()
 	const userId = params.id
 
-	const { retrieveUser, getCurrentUser, updateUser } = useUsers()
+	const { retrieveUser, errorMessage, getCurrentUser, updateUser } = useUsers()
 	const currentUser: IUser | undefined = getCurrentUser(userId)
 
 	const [ handleInput, formState, setFormData ] = useForm({
@@ -108,7 +108,7 @@ const EditUser: FunctionComponent = () => {
 						<div>
 							{
 								!currentUser ? (
-									<p>Error: No user found</p>
+									<p>{ errorMessage }</p>
 								) : (
 									<>
 										<form className={ updateUserClasses.form } onSubmit={ handleSubmit }>

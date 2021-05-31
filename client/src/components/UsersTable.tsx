@@ -12,7 +12,7 @@ type TProps = {
 const UsersTable: FunctionComponent<TProps> = (props) => {
 	const { userQueryString } = props
 
-	const { filteredUsersList, retrieveUsers } = useUsers(userQueryString)
+	const { filteredUsersList, errorMessage, retrieveUsers } = useUsers(userQueryString)
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -22,10 +22,21 @@ const UsersTable: FunctionComponent<TProps> = (props) => {
 	const userColumns = [ 'Name', 'Age', 'Location', 'Marital status', 'Children', '' ]
 
 	return (
-		<Table
-			columns={ userColumns }
-			data={ filteredUsersList }
-		/>
+		<>
+			{
+				errorMessage && (
+					<p>{ errorMessage }</p>
+				)
+			}
+			{
+				filteredUsersList.length ? (
+					<Table
+						columns={ userColumns }
+						data={ filteredUsersList }
+					/>
+				) : null
+			}
+		</>
 	)
 }
 

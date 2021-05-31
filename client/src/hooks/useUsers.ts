@@ -9,6 +9,7 @@ type TGetCurrentUser = (userId: string) => IUser | undefined
 
 type TUseUsers = (userQueryString?: string) => {
 	filteredUsersList: Array<IUser>
+	errorMessage: string
 	getCurrentUser: TGetCurrentUser
 	retrieveUser: (userId: string) => (dispatch: Dispatch) => void
 	retrieveUsers: () => (dispatch: Dispatch) => void
@@ -18,7 +19,7 @@ type TUseUsers = (userQueryString?: string) => {
 }
 
 const useUsers: TUseUsers = (userQueryString = '') => {
-	const { usersList } = useSelector((state: TRootState) => state.users)
+	const { usersList, errorMessage } = useSelector((state: TRootState) => state.users)
 
 	const filteredUsersList = usersList.filter(user => {
 		let userMatchesTheQuery = false
@@ -61,6 +62,7 @@ const useUsers: TUseUsers = (userQueryString = '') => {
 
 	return {
 		filteredUsersList,
+		errorMessage,
 		getCurrentUser,
 		retrieveUser,
 		retrieveUsers,

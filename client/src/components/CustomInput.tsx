@@ -1,5 +1,6 @@
-import React, { useEffect, useState, FunctionComponent, ChangeEvent } from 'react'
+import React, { useEffect, useReducer, FunctionComponent, ChangeEvent } from 'react'
 import { TextField, MenuItem } from '@material-ui/core'
+import { validate } from '../utils/validators'
 
 interface IProps {
 	type?: string
@@ -8,29 +9,74 @@ interface IProps {
 	select?: boolean
 	options?: Array<any>
 	initialValue?: string
-	handleInput: (id: string, value: string) => void
+	handleInput: (id: string, value: string, isValid: boolean) => void
+	validators?: Array<any>
+	isInitiallyValid?: boolean
+	errorText?: string
 }
 
 const CustomInput: FunctionComponent<IProps> = (props) => {
-	const { type, id, label, select, options, initialValue, handleInput } = props
+	const { type, id, label, select, options, initialValue, handleInput,
+		isInitiallyValid, validators, errorText } = props
 
-	const [ value, setValue ] = useState<string>('')
+	const actionTypes = {
+		CHANGE: 'CHANGE',
+		BLUR: 'BLUR',
+		FOCUS: 'FOCUS'
+	}
 
-	useEffect(() => {
-		if (initialValue) {
-			setValue(initialValue)
+	const inputReducer = (state: any, action: any) => {
+		switch (action.type) {
+			case actionTypes.CHANGE:
+				return {
+					...state,
+					value: action.payload.value,
+					isValid: validate(action.payload.value, action.payload.validators)
+				}
+			case actionTypes.BLUR:
+				return {
+					...state,
+					isBlurred: true,
+					isFocused: false
+				}
+			case actionTypes.FOCUS:
+				return {
+					...state,
+					isFocused: true
+				}
+			default:
+				return state
 		}
+	}
 
-	}, [ initialValue ])
+	const initialState = {
+		value: initialValue || '',
+		isValid: isInitiallyValid || false,
+		isBlurred: false,
+		isFocused: false
+	}
+
+	const [ inputState, dispatch ] = useReducer(inputReducer, initialState)
+	const { value, isValid, isBlurred, isFocused } = inputState
 
 	useEffect(() => {
-		handleInput(id, value)
-	}, [ id, value, handleInput ])
+		handleInput(id, value, isValid)
+	}, [ id, value, isValid, handleInput ])
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
 		event.preventDefault()
-		setValue(event.target.value)
+		dispatch({
+			type: actionTypes.CHANGE,
+			payload: {
+				value: event.target.value,
+				validators
+			}
+		})
 	}
+
+	const handleBlur = () => dispatch({ type: actionTypes.BLUR })
+
+	const handleFocus = () => dispatch({ type: actionTypes.FOCUS })
 
 	return (
 		(select && options) ? (
@@ -41,6 +87,10 @@ const CustomInput: FunctionComponent<IProps> = (props) => {
 				variant="outlined"
 				value={ value }
 				onChange={ handleChange }
+				onBlur={ handleBlur }
+				onFocus={ handleFocus }
+				error={ !isValid && isBlurred && !isFocused }
+				helperText={ errorText }
 			>
 				{
 					options.map((option: string) =>
@@ -58,6 +108,10 @@ const CustomInput: FunctionComponent<IProps> = (props) => {
 				variant="outlined"
 				value={ value }
 				onChange={ handleChange }
+				onBlur={ handleBlur }
+				onFocus={ handleFocus }
+				error={ !isValid && isBlurred && !isFocused }
+				helperText={ errorText }
 			/>
 		)
 	)

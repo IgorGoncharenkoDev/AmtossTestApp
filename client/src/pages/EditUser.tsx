@@ -14,6 +14,7 @@ import { maritalStatuses } from '../constants'
 import { IUser } from '../types/types'
 
 import { useUserFormStyles, useProgressStyles } from '../styles/styles'
+import { VALIDATOR_REQUIRE } from '../utils/validators'
 
 type TParams = {
 	id: string
@@ -31,16 +32,17 @@ const EditUser: FunctionComponent = () => {
 	const currentUser: IUser | undefined = getCurrentUser(userId)
 
 	const [ handleInput, formState, setFormData ] = useForm({
-		id: '',
-		inputFields: {
-			name: { value: '' },
-			age: { value: '' },
-			location: { value: '' },
-			maritalStatus: { value: '' },
-			children: { value: '' },
-		},
-	})
-	const { name, age, location, maritalStatus, children } = formState.inputFields
+		name: { value: '', isValid: false },
+		age: { value: '', isValid: false },
+		location: { value: '', isValid: false },
+		maritalStatus: { value: '', isValid: false },
+		children: { value: '', isValid: false },
+	},
+	false
+	)
+
+
+	const { name, age, location, maritalStatus, children } = formState.inputs
 
 	useEffect(() => {
 		dispatch(retrieveUser(userId))
@@ -51,20 +53,15 @@ const EditUser: FunctionComponent = () => {
 			return
 		}
 
-		const { id, name, age, location, maritalStatus, children } = currentUser
+		const { name, age, location, maritalStatus, children } = currentUser
 
-		const formDataToUpdate = {
-			id,
-			inputFields: {
-				name: { value: name },
-				age: { value: age },
-				location: { value: location },
-				maritalStatus: { value: maritalStatus },
-				children: { value: children },
-			}
-		}
-
-		setFormData(formDataToUpdate)
+		setFormData({
+			name: { value: name, isValid: true },
+			age: { value: age, isValid: true },
+			location: { value: location, isValid: true },
+			maritalStatus: { value: maritalStatus, isValid: true },
+			children: { value: children, isValid: true },
+		}, true)
 
 		setIsLoading(false)
 	}, [ currentUser ])
@@ -121,6 +118,9 @@ const EditUser: FunctionComponent = () => {
 													label="Name"
 													initialValue={ name.value }
 													handleInput={ handleInput }
+													validators={ [ VALIDATOR_REQUIRE() ] }
+													isInitiallyValid={ name.isValid }
+													errorText="Please, enter a valid name"
 												/>
 												<CustomInput
 													id="age"
@@ -128,12 +128,18 @@ const EditUser: FunctionComponent = () => {
 													label="Age"
 													initialValue={ age.value }
 													handleInput={ handleInput }
+													validators={ [ VALIDATOR_REQUIRE() ] }
+													isInitiallyValid={ age.isValid }
+													errorText="Please, enter a valid age"
 												/>
 												<CustomInput
 													id="location"
 													label="Location"
 													initialValue={ location.value }
 													handleInput={ handleInput }
+													validators={ [ VALIDATOR_REQUIRE() ] }
+													isInitiallyValid={ location.isValid }
+													errorText="Please, enter a valid location"
 												/>
 											</Box>
 											<Box>
@@ -144,6 +150,9 @@ const EditUser: FunctionComponent = () => {
 													options={ maritalStatuses }
 													initialValue={ maritalStatus.value }
 													handleInput={ handleInput }
+													validators={ [ VALIDATOR_REQUIRE() ] }
+													isInitiallyValid={ maritalStatus.isValid }
+													errorText="Please, select your marital status"
 												/>
 												<CustomInput
 													id="children"
@@ -151,11 +160,19 @@ const EditUser: FunctionComponent = () => {
 													label="Children"
 													initialValue={ children.value }
 													handleInput={ handleInput }
+													validators={ [ VALIDATOR_REQUIRE() ] }
+													isInitiallyValid={ children.isValid }
+													errorText="Please, enter a valid number"
 												/>
 											</Box>
 											<Box>
-												<Button variant="contained" color="primary" className={ updateUserClasses.button }
-													type="submit">
+												<Button
+													variant="contained"
+													color="primary"
+													className={ updateUserClasses.button }
+													type="submit"
+													disabled={ !formState.formIsValid }
+												>
 													Submit
 												</Button>
 												<Button

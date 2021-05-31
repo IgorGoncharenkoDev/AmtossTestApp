@@ -25,7 +25,7 @@ const UsersTable: FunctionComponent<TProps> = (props) => {
 	return (
 		<>
 			{
-				isLoading && (
+				isLoading && !filteredUsersList.length && (
 					<CircularProgress />
 				)
 			}

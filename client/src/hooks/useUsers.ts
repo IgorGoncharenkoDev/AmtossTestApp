@@ -8,6 +8,7 @@ import { fetchUser, fetchUsers, addUser, editUser, removeUser } from '../redux/a
 type TGetCurrentUser = (userId: string) => IUser | undefined
 
 type TUseUsers = (userQueryString?: string) => {
+	isLoading: boolean
 	filteredUsersList: Array<IUser>
 	errorMessage: string
 	getCurrentUser: TGetCurrentUser
@@ -19,7 +20,7 @@ type TUseUsers = (userQueryString?: string) => {
 }
 
 const useUsers: TUseUsers = (userQueryString = '') => {
-	const { usersList, errorMessage } = useSelector((state: TRootState) => state.users)
+	const { isLoading, usersList, errorMessage } = useSelector((state: TRootState) => state.users)
 
 	const filteredUsersList = usersList.filter(user => {
 		let userMatchesTheQuery = false
@@ -61,6 +62,7 @@ const useUsers: TUseUsers = (userQueryString = '') => {
 	}
 
 	return {
+		isLoading,
 		filteredUsersList,
 		errorMessage,
 		getCurrentUser,

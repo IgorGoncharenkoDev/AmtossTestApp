@@ -1,5 +1,6 @@
 import React, { useEffect, FunctionComponent } from 'react'
 import { useDispatch } from 'react-redux'
+import { CircularProgress } from '@material-ui/core'
 
 import Table from './Table/Table'
 
@@ -12,7 +13,7 @@ type TProps = {
 const UsersTable: FunctionComponent<TProps> = (props) => {
 	const { userQueryString } = props
 
-	const { filteredUsersList, errorMessage, retrieveUsers } = useUsers(userQueryString)
+	const { isLoading, filteredUsersList, errorMessage, retrieveUsers } = useUsers(userQueryString)
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -23,6 +24,11 @@ const UsersTable: FunctionComponent<TProps> = (props) => {
 
 	return (
 		<>
+			{
+				isLoading && (
+					<CircularProgress />
+				)
+			}
 			{
 				errorMessage && (
 					<p>{ errorMessage }</p>

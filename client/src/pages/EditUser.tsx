@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent, SyntheticEvent } from 'react'
+import React, { useEffect, FunctionComponent, SyntheticEvent } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { CircularProgress, Box, Button } from '@material-ui/core'
@@ -21,14 +21,12 @@ type TParams = {
 }
 
 const EditUser: FunctionComponent = () => {
-	const [ isLoading, setIsLoading ] = useState<boolean>(true)
-
 	const dispatch = useDispatch()
 	const history = useHistory()
 	const params: TParams = useParams()
 	const userId = params.id
 
-	const { retrieveUser, errorMessage, getCurrentUser, updateUser } = useUsers()
+	const { isLoading, retrieveUser, errorMessage, getCurrentUser, updateUser } = useUsers()
 	const currentUser: IUser | undefined = getCurrentUser(userId)
 
 	const [ handleInput, formState, setFormData ] = useForm({
@@ -62,8 +60,6 @@ const EditUser: FunctionComponent = () => {
 			maritalStatus: { value: maritalStatus, isValid: true },
 			children: { value: children, isValid: true },
 		}, true)
-
-		setIsLoading(false)
 	}, [ currentUser ])
 
 	const handleSubmit = (event: React.SyntheticEvent) => {
